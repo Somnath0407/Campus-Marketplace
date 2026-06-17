@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import AddProductPage from './pages/AddProductPage';
@@ -27,8 +28,9 @@ const App = () => {
                 <Route path="/register" element={<RegisterPage />} />
 
                 {/* Protected routes */}
+                <Route path="/" element={<LandingPage />} />
                 <Route
-                  path="/"
+                  path="/browse"
                   element={
                     <ProtectedRoute>
                       <HomePage />
