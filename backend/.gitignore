@@ -1,0 +1,19 @@
+# Environment variables — NEVER commit this file
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Uploaded images — local only, not for version control
+uploads/*
+!uploads/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
