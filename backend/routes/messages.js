@@ -146,6 +146,22 @@ router.post('/send', protect, async (req, res) => {
   }
 });
 
+// @route   GET /api/messages/unread-count
+// @desc    Get count of unread messages
+// @access  Private
+router.get('/unread-count', protect, async (req, res) => {
+  try {
+    const count = await Message.countDocuments({
+      receiverId: req.user._id,
+      isRead: false,
+    });
+
+    res.json({ unreadCount: count });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // @route   DELETE /api/messages/:messageId
 // @desc    Delete a message (only sender can delete)
 // @access  Private
@@ -163,22 +179,6 @@ router.delete('/:messageId', protect, async (req, res) => {
 
     await message.deleteOne();
     res.json({ message: 'Message deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// @route   GET /api/messages/unread-count
-// @desc    Get count of unread messages
-// @access  Private
-router.get('/unread-count', protect, async (req, res) => {
-  try {
-    const count = await Message.countDocuments({
-      receiverId: req.user._id,
-      isRead: false,
-    });
-
-    res.json({ unreadCount: count });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
