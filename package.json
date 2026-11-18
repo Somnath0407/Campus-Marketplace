@@ -1,4 +1,10 @@
 {
+  "name": "campus-marketplace",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "build": "npm --prefix backend install"
+  },
   "dependencies": {
     "dotenv": "^18.0.9",
     "mongoose": "^9.11.4"

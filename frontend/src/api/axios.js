@@ -5,6 +5,7 @@ const instance = axios.create({
     ? `${import.meta.env.VITE_API_URL}/api`
     : '/api', // falls back to Vite proxy in local dev
   headers: { 'Content-Type': 'application/json' },
+  timeout: 60000, // 60s timeout to allow Render free-tier cold starts
 });
 
 // Attach JWT token to every request

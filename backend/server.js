@@ -1,4 +1,8 @@
-require('node:dns/promises').setServers(['1.1.1.1', '8.8.8.8']);
+try {
+  require('node:dns/promises').setServers(['1.1.1.1', '8.8.8.8']);
+} catch (dnsErr) {
+  console.warn('DNS setServers warning:', dnsErr.message);
+}
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -13,13 +17,32 @@ const app = express();
 connectDB();
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'https://campus-marketplace-dun.vercel.app',
+];
+
+if (process.env.CLIENT_URL) {
+  const normalized = process.env.CLIENT_URL.replace(/\/+$/, '');
+  if (!allowedOrigins.includes(normalized)) {
+    allowedOrigins.push(normalized);
+  }
+}
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    process.env.CLIENT_URL
-  ],
+  origin: (origin, callback) => {
+    // Allow non-browser requests (e.g. curl, health checks)
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.includes(origin) ||
+      /^https:\/\/campus-marketplace.*\.vercel\.app$/.test(origin)
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 app.use(express.json());
